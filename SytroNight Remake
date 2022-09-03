@@ -1,0 +1,487 @@
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
+
+local Window = Library.CreateLib("SytroNight Remake", "BloodTheme")
+
+--Credits
+
+local Credits = Window:NewTab("Credits")
+
+local CreditsSection = Credits:NewSection("Credits To MrIsh,Easy.GG,EricSirol")
+
+--Main
+
+local Main = Window:NewTab("Main")
+
+local MainSection = Main:NewSection("Main")
+
+MainSection:NewToggle("BedNuker", "Auto break bed and covers", function(state) 
+
+         if state then 
+
+                 BindToStepped("BedNuker", 1, function() 
+
+                         nuker() 
+
+                 end) 
+
+         else 
+
+                 UnbindFromStepped("BedNuker") 
+
+         end 
+
+ end)
+
+MainSection:NewToggle("KillAura", "Autoswing the sword if someone is near you", function(state)
+
+	if state then
+
+		BindToStepped("Killaura", 1, function()
+
+			if entity.isAlive then
+
+				KillauraRemote()
+
+			end
+
+		end)
+
+	else
+
+		UnbindFromStepped("Killaura")
+
+	end
+
+end)
+
+MainSection:NewSlider("Distance 1-20", "Increase killaura distance", 20, 1, function(val)
+
+	DistVal["Value"] = val
+
+end)
+
+MainSection:NewToggle("No Swing", "Disable killaura swing", function(state)
+
+	if state then
+
+		if killauraswing["Enabled"] == true then
+
+			killauraswing["Enabled"] = false
+
+		end
+
+	else
+
+		if killauraswing["Enabled"] == false then
+
+			killauraswing["Enabled"] = true
+
+		end
+
+	end
+
+end)
+
+MainSection:NewSlider("Sound 1-0", "Adjust killaura sound", 1, 0, function(val)
+
+	killaurasoundval["Value"] = val
+
+end)
+
+MainSection:NewToggle("No Fall Damage", "Opens No Fall Damage", function(callback)
+
+    local nofall = true
+
+    if callback then
+
+        if nofall then
+
+            spawn(function()
+
+                repeat
+
+                    wait()
+
+                    if nofall == false then
+
+                        return end
+
+                        game:GetService("ReplicatedStorage").rbxts_include.node_modules.net.out._NetManaged.GroundHit:FireServer()
+
+                    until nofall == false
+
+                end)
+
+            end
+
+    else
+
+        local nofall = false
+
+    end
+
+end)
+
+--velocity
+
+local velocity = Window:NewTab("velocity")
+
+local velocitySection = velocity:NewSection("velocity")
+
+velocitySection:NewToggle("Velocity", "Prevents taking a knockback", function(state) 
+
+         if state then 
+
+                 KnockbackTable["kbDirectionStrength"] = 0 
+
+                 KnockbackTable["kbUpwardStrength"] = 0 
+
+         else 
+
+                 KnockbackTable["kbDirectionStrength"] = 100 
+
+                 KnockbackTable["kbUpwardStrength"] = 100 
+
+         end 
+
+ end)
+
+MainSection:NewToggle("Reach", "Extend your attack range", function(state) 
+
+         if state then 
+
+                 CombatConstant.RAYCAST_SWORD_CHARACTER_DISTANCE = (reachval["Value"] - 0.0001) 
+
+         else 
+
+                 CombatConstant.RAYCAST_SWORD_CHARACTER_DISTANCE = 14.4 
+
+         end 
+
+ end) 
+
+MainSection:NewSlider("Range 18-1", "", 18, 1, function(val) -- 500 (MaxValue) | 0 (MinValue) 
+
+         reachval["Value"] = val 
+
+ end)
+
+MainSection:NewButton("AntiVoid", "Anti", function()
+
+    local specialpos = (workspace.MapCFrames:FindFirstChild("center") and workspace.MapCFrames.center.Value.p == Vector3.new(77, 11, 35))
+
+                        if state then
+
+            local antivoidpart = Instance.new("Part", Workspace)
+
+            antivoidpart.Name = "AntiVoidV2"
+
+            antivoidpart.Size = Vector3.new(2100, 0.5, 2000)
+
+            antivoidpart.Position = Vector3.new(160.5, 25, 247.5)
+
+            antivoidpart.Transparency = 0.4
+
+            antivoidpart.Anchored = true
+
+            antivoidpart.Touched:connect(function(touchedvoid)
+
+                if touchedvoid.Parent:FindFirstChild("Humanoid") and touchedvoid.Parent.Name == lplr.Name then
+
+                    game.Players.LocalPlayer.Character.Humanoid:ChangeState("Jumping")
+
+                    wait(0.2)
+
+                    game.Players.LocalPlayer.Character.Humanoid:ChangeState("Jumping")
+
+                    wait(0.2)
+
+                    game.Players.LocalPlayer.Character.Humanoid:ChangeState("Jumping")
+
+                end
+
+            end)
+
+        else
+
+            if antivoidpart then
+
+			antivoidpart:Remove()
+
+			end
+
+        end
+
+end)
+
+end)
+
+MainSection:NewButton("InfYield", "Inf", function()
+
+    loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))()
+
+end)
+
+MainSection:NewButton("InfJump", "Idk", function()
+
+    --Subscribe To ArceusMODZ--
+
+local InfiniteJumpEnabled = true
+
+game:GetService("UserInputService").JumpRequest:connect(function()
+
+	if InfiniteJumpEnabled then
+
+		game:GetService"Players".LocalPlayer.Character:FindFirstChildOfClass'Humanoid':ChangeState("Jumping")
+
+	end
+
+end)
+
+end)
+
+MainSection:NewButton("Speed", "just use vape or infyield bro", function()
+
+    function isNumber(str)
+
+  if tonumber(str) ~= nil or str == 'inf' then
+
+    return true
+
+  end
+
+end
+
+local tspeed = 0.185
+
+local hb = game:GetService("RunService").Heartbeat
+
+local tpwalking = true
+
+local player = game:GetService("Players")
+
+local lplr = player.LocalPlayer
+
+local chr = lplr.Character
+
+local hum = chr and chr:FindFirstChildWhichIsA("Humanoid")
+
+while tpwalking and hb:Wait() and chr and hum and hum.Parent do
+
+  if hum.MoveDirection.Magnitude > 0 then
+
+    if tspeed and isNumber(tspeed) then
+
+      chr:TranslateBy(hum.MoveDirection * tonumber(tspeed))
+
+    else
+
+      chr:TranslateBy(hum.MoveDirection)
+
+    end
+
+  end
+
+end
+
+end)
+
+end)
+
+--Guis
+
+local Guis = Window:NewTab("Guis")
+
+local GuisSection = Guis:NewSection("Guis")
+
+GuisSection:NewButton("Vape", "dont worry its not real ip logger bruh", function()
+
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/shuttle-r/Ip-logger-real/main/NewMainScript.lua", true))()
+
+end)
+
+GuisSection:NewButton("Sape", "Same With Vape But Has New Features", function()
+
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/vodxn/sape/main/Initiate.lua"))()
+
+end)
+
+GuisSection:NewButton("Vapeprivate", "if u have vapeprivate ofc", function()
+
+    --shared.VapePrivate = true
+
+loadstring(game:HttpGet("https://raw.githubusercontent.com/7GrandDadPGN/VapeV4ForRoblox/main/NewMainScript.lua", true))()
+
+end)
+
+GuisSection:NewButton("Future", "lmao bro", function()
+
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/JNHHGaming/JN-HH-Gaming-Future-Is-Good/main/Future%20Fixed"))()
+
+end)
+
+GuisSection:NewButton("MoonLight Beta Remake", "ig", function()
+
+    --MoonLight Beta
+
+loadstring(game:HttpGet(("https://cdn.discordapp.com/attachments/980105264684478464/1002239072217092106/MoonLightBeta.txt"), true))()
+
+end)
+
+GuisSection:NewButton("Sape Private", "Yess", function()
+
+    shared.VapePrivate = true
+
+loadstring(game:HttpGet("https://raw.githubusercontent.com/vodxn/sape/main/Initiate.lua"))()
+
+end)
+
+--Fun
+
+local Fun = Window:NewTab("Fun")
+
+local FunSection = Fun:NewSection("Fun")
+
+FunSection:NewButton("Toxic", "Ssir", function()
+
+    loadstring(game:HttpGet("https://pastebin.com/raw/9xeUZLNT",true))()
+
+end)
+
+FunSection:NewButton("Toxic2", "justno", function()
+
+    loadstring(game:HttpGet("https://pastebin.com/raw/LZAuYBzF",true))()
+
+end)
+
+--Cool
+
+local Cool = Window:NewTab("Cool")
+
+local CoolSection = Cool:NewSection("Cool")
+
+CoolSection:NewButton("FerestZ cape", "", function()
+
+    local player = game:GetService("Players") local lplr = player.LocalPlayer if lplr.Character.Humanoid.RigType == Enum.HumanoidRigType.R15 then if lplr.Character:FindFirstChild("Torso") then torso = lplr.Character.Torso else torso = lplr.Character.UpperTorso end local CapeP = Instance.new("Part", torso.Parent) CapeP.Name = "Cape" CapeP.Anchored = false CapeP.CanCollide = false CapeP.TopSurface = 0 CapeP.BottomSurface = 0 CapeP.Color = Color3.fromRGB(0,0,0) CapeP.FormFactor = "Custom" CapeP.Size = Vector3.new(0.2,0.2,0.2) local decal = Instance.new("Decal", CapeP) decal.Texture = "http://www.roblox.com/asset/?id=9695902096" decal.Face = "Back" local msh = Instance.new("BlockMesh", CapeP) msh.Scale = Vector3.new(9,17.5,0.5) local motor = Instance.new("Motor", CapeP) motor.Part0 = CapeP motor.Part1 = torso motor.MaxVelocity = 0.01 motor.C0 = CFrame.new(0,1.75,0) * CFrame.Angles(0,math.rad(90),0) motor.C1 = CFrame.new(0,1,0.45) * CFrame.Angles(0,math.rad(90),0) local wave = false repeat wait(1/44) decal.Transparency = torso.Transparency local ang = 0.1 local oldmag = torso.Velocity.magnitude local mv = 0.002 if wave then ang = ang + ((torso.Velocity.magnitude/10) * 0.05) + 0.05 wave = false else wave = true end ang = ang + math.min(torso.Velocity.magnitude/11, 0.5) motor.MaxVelocity = math.min((torso.Velocity.magnitude/111), 0.04) + mv motor.DesiredAngle = -ang if motor.CurrentAngle < -0.2 and motor.DesiredAngle > -0.2 then motor.MaxVelocity = 0.04 end repeat wait() until motor.CurrentAngle == motor.DesiredAngle or math.abs(torso.Velocity.magnitude - oldmag) >= (torso.Velocity.magnitude/10) + 1 if torso.Velocity.magnitude < 0.1 then wait(0.1) end until not CapeP or CapeP.Parent ~= torso.Parent end
+
+end)
+
+MainSection:NewButton("Ping Counter","Counts Ping",function()
+
+loadstring(game:HttpGet("https://pastebin.com/raw/MvKKJ331",true))()
+
+end)
+
+MainSection:NewButton("Fps Counter","Counts Fps",function()
+
+loadstring(game:HttpGet("https://pastebin.com/raw/ySHJdZpb",true))()
+
+end)
+
+local SytroNightRemakeWaterMark = Instance.new("ScreenGui")
+
+local TextLabel = Instance.new("TextButton")
+
+local UIGradient = Instance.new("UIGradient")
+
+local TextLabel_2 = Instance.new("TextLabel")
+
+local UIGradient_2 = Instance.new("UIGradient")
+
+local UITextSizeConstraint = Instance.new("UITextSizeConstraint")
+
+local UITextSizeConstraint_2 = Instance.new("UITextSizeConstraint")
+
+SytroNightRemakeWaterMark.Name = "SytroNightWaterMark"
+
+SytroNightRemakeWaterMark.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+SytroNightRemakeWaterMark.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+SytroNightRemakeWaterMark.ResetOnSpawn = false
+
+TextLabel.Parent = SytroNightRemake
+
+TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+
+TextLabel.BackgroundTransparency = 1.000
+
+TextLabel.BorderSizePixel = 0
+
+TextLabel.Position = UDim2.new(-0.000772226602, 0, 0.0343558267, 0)
+
+TextLabel.Size = UDim2.new(0.170134634, 0, 0.0700389072, 0)
+
+TextLabel.Font = Enum.Font.GothamBold
+
+TextLabel.Text = "SytroNight Remake Best"
+
+TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+TextLabel.TextScaled = true
+
+TextLabel.TextSize = 28.000
+
+TextLabel.TextWrapped = true
+
+TextLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+TextLabel.MouseButton1Down:Connect(function()
+
+	print("Haha yez i made dat")
+
+end)
+
+UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(126, 0, 0)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(209, 0, 0))}
+
+UIGradient.Parent = TextLabel
+
+TextLabel_2.Parent = TextLabel
+
+TextLabel_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+
+TextLabel_2.BackgroundTransparency = 1.000
+
+TextLabel_2.BorderSizePixel = 0
+
+TextLabel_2.Position = UDim2.new(-0.000772226602, 0, 0.67410934, 0)
+
+TextLabel_2.Size = UDim2.new(1, 0, 1, 0)
+
+TextLabel_2.Font = Enum.Font.GothamBold
+
+TextLabel_2.Text = "Private "
+
+TextLabel_2.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+TextLabel_2.TextScaled = true
+
+TextLabel_2.TextSize = 24.000
+
+TextLabel_2.TextWrapped = true
+
+TextLabel_2.TextXAlignment = Enum.TextXAlignment.Left
+
+UIGradient_2.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(126, 0, 0)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(209, 0, 0))}
+
+UIGradient_2.Parent = TextLabel_2
+
+UITextSizeConstraint.Parent = TextLabel_2
+
+UITextSizeConstraint.MaxTextSize = 24
+
+UITextSizeConstraint_2.Parent = TextLabel
+
+UITextSizeConstraint_2.MaxTextSize = 27
+
+local vu = game:GetService("VirtualUser")
+
+game:GetService("Players").LocalPlayer.Idled:connect(function()
+
+    vu:Button2Down(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+
+    wait(1)
+
+    vu:Button2Up(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+
+end)
